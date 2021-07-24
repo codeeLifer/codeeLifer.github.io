@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>java基础面试重点 | Gridea</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1627128032031">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codeeLifer.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codeeLifer.github.io">
+        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1627128032031" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codeeLifer.github.io">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="https://codeeLifer.github.io" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="https://codeeLifer.github.io/post/qin-shi-420" class="menu purple-link">
+            寝室420
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">java基础面试重点</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2021-07-24</span>
+            
+          </div>
+          <div class="post-content">
+            <h2 id="1-你能用java覆盖静态方法吗如果我在子类中创建相同的方法是编译时错误">1. 你能用Java覆盖静态方法吗？如果我在子类中创建相同的方法是编译时错误？</h2>
+<p>不，你不能在Java中覆盖静态方法，但在子类中声明一个完全相同的方法不是编译时错误，这称为隐藏在Java中的方法。 你不能覆盖Java中的静态方法，因为方法覆盖基于运行时的动态绑定，静态方法在编译时使用静态绑定进行绑定。虽然可以在子类中声明一个具有相同名称和方法签名的方法，看起来可以在Java中覆盖静态方法，但实际上这是方法隐藏。Java不会在运行时解析方法调用，并且根据用于调用静态方法的 Object 类型，将调用相应的方法。这意味着如果你使用父类的类型来调用静态方法，那么原始静态将从父类中调用，另一方面如果你使用子类的类型来调用静态方法，则会调用来自子类的方法。简而言之，你无法在Java中覆盖静态方法。如果你使用像Eclipse或Netbeans这样的Java IDE，它们将显示警告静态方法应该使用类名而不是使用对象来调用，因为静态方法不能在Java中重写。</p>
+<pre><code class="language-java">/**
+ *
+ * Java program which demonstrate that we can not override static method in Java.
+ * Had Static method can be overridden, with Super class type and sub class object
+ * static method from sub class would be called in our example, which is not the case.
+ */
+public class CanWeOverrideStaticMethod {
+    public static void main(String args[]) {
+        Screen scrn = new ColorScreen();//if we can  override static , this should call method from Child class
+        scrn.show(); //IDE will show warning, static method should be called from classname
+    } 
+}class Screen{ /*
+     * public static method which can not be overridden in Java
+     */
+    public static void show(){
+        System.out.printf(&quot;Static method from parent class&quot;);
+    }
+}class ColorScreen extends Screen{/*
+     * static method of same name and method signature as existed in super
+     * class, this is not method overriding instead this is called
+     * method hiding in Java
+     */
+    public static void show(){
+        System.err.println(&quot;Overridden static method in Child Class in Java&quot;);
+    }
+}
+程序输出：Static method from parent class
+</code></pre>
+<p>此输出确认你无法覆盖Java中的静态方法，并且静态方法基于类型信息而不是基于Object进行绑定。如果要覆盖静态method，则会调用子类或 ColorScreen 中的方法。这一切都在讨论中我们可以覆盖Java中的静态方法。我们已经确认没有，我们不能覆盖静态方法，我们只能在Java中隐藏静态方法。创建具有相同名称和method签名的静态方法称为Java隐藏方法。IDE将显示警告：&quot;静态方法应该使用类名而不是使用对象来调用&quot;, 因为静态方法不能在Java中重写。 这些是我的核心Java面试问题和答案的清单。</p>
+<h2 id="2-动态代理源码分析">2. 动态代理源码分析</h2>
+<h2 id="3-抽象类没有抽象方法">3. 抽象类没有抽象方法</h2>
+<ul>
+<li>这样目的是，防止在其它类中创建该抽象类，该抽象类只能作为父类被继承</li>
+</ul>
+<hr>
+<h2 id="4-hashmap面试专题">4. hashMap面试专题</h2>
+<h3 id="1-hashmap原理">1. hashMap原理</h3>
+<h3 id="2讲一下hashmap中put方法过程">2.讲一下HashMap中put方法过程？</h3>
+<ul>
+<li>对Key 求Hash值，然后再计算下标。</li>
+<li>如果没有碰撞，直接放入桶中</li>
+<li>如果碰撞了，以链表的方式链接到后面</li>
+<li>如果链表长度超过阀值（TREEIFY_THRESHOLD==8），就把链表转成红黑树。</li>
+<li>如果节点已经存在就替换旧值</li>
+<li>如果桶满了（容量*加载因子），就需要resize。</li>
+</ul>
+<pre><code class="language-java">    
+
+	//调用下面的putVal()函数,注意这里首先计算了一下key的hash值，重点：这里的hash值并不是key.hashCode()方式计算的，而是通过key.hash(key)方法计算得到的
+	public V put(K key, V value) {
+        return putVal(hash(key), key, value, false, true); 
+    }
+  
+	//采用该方法计算出hash值是因为要尽可能降低hash碰撞的概率，使得节点在table中尽可能平均分布
+	//右移16位，正好是32bit的一半，自己的高半区和低半区做异或，就是为了混合原始哈希码的高位和低位，以此来加大低位的随机性。而且混合后的低位掺杂了高位的部分特征，这样高位的信息也被变相保留下来
+    static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+    }
+
+	final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        if ((p = tab[i = (n - 1) &amp; hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            Node&lt;K,V&gt; e; K k;
+            if (p.hash == hash &amp;&amp;
+                ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode)
+                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &amp;&amp;
+                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if (++size &gt; threshold)
+            resize();
+        afterNodeInsertion(evict);
+        return null;
+    }
+</code></pre>
+<h3 id="3-hashmap中hash函数怎么是是实现的还有哪些hash的实现方式">3. HashMap中hash函数怎么是是实现的？还有哪些hash的实现方式？</h3>
+<ul>
+<li>
+<p>高16bit不变，低16bit 和高16bit做了一个异或.</p>
+</li>
+<li>
+<p>（n-1）&amp;hash--&gt;得到下标.</p>
+</li>
+<li>
+<p>还有哪些Hash 实现方式：可以参考之前的博客Effective Java 学习笔记--hashCode().</p>
+</li>
+</ul>
+<h3 id="4-hashmap怎样解决冲突讲一下扩容过程假如一个值在原数组中现在移动了新数组位置肯定改变了那是什么定位到在这个值新数组中的位置">4. HashMap怎样解决冲突，讲一下扩容过程，假如一个值在原数组中，现在移动了新数组，位置肯定改变了，那是什么定位到在这个值新数组中的位置，</h3>
+<ul>
+<li>将新节点加到链表后，</li>
+<li>容量扩充为原来的两倍，然后对每个节点重新计算哈希值。</li>
+<li>这个值只可能在两个地方，一个是原下标的位置，另一种是在下标为&lt;原下标+原容量&gt;的位置。</li>
+</ul>
+<h3 id="5-抛开hashmaphash冲突有那些解决办法">5. 抛开HashMap，hash冲突有那些解决办法？</h3>
+<ul>
+<li>开放定址，链地址法</li>
+</ul>
+<h3 id="6-针对hashmap中某个entry链太长查找的时间复杂度可能达到on怎么优化">6. 针对HashMap中某个Entry链太长，查找的时间复杂度可能达到O(n)，怎么优化？</h3>
+<ul>
+<li>将链表转为红黑树，JDK1.8已经实现了</li>
+</ul>
+<h3 id="7-hashmap是线程安全的吗为什么">7. HashMap是线程安全的吗？为什么</h3>
+<p><font color='red'>HashMap不是线程安全的</font>，HashTable是线程安全的，其保证线程安全的原理是直接在大部分方法上加入synchorized关键字，缺点是浪费性能。</p>
+<p>另一个解决办法是使用JUC包下面的CocurrentHashMap，这是线程安全的hashMap，底层使用了CAS锁与synchronized同步块保证同步</p>
+<h3 id="8-cocurrenthashmap同步原理">8. CocurrentHashMap同步原理</h3>
+<p>线程安全问题数据不一致的问题put（1，&quot;Jack&quot;）；<br>
+（1）hash（key）结果 pass  <font color='red'>  线程安全</font><br>
+（2）数组初始化处理 only one CAS   <font color='orange'>线程不安全</font>  <font color='red'>只能有且只有一个线程对数组初始化</font><br>
+（3）检查数组某个位置是否为null，为null，插入CAS     <font color='orange'>线程不安全</font><br>
+（4）不为null synchronizd（f 当前数组下标）代码块，<font color='red'>不会影响其他数组下标下面的锁机制把锁的粒度降低了</font>   <font color='orange'>线程不安全</font></p>
+<p>​	a.替换<br>
+​	b.红黑树<br>
+​	c.链表<br>
+（5）扩容，移动数据…&gt;扩容就比较麻烦了new Table（double]<br>
+线程安全？t1 t2 t3 resize addCount sync t1-----扩容必须要等着t1线程完成扩容之后！<br>
+t2，t3，t4插入数据 put 不行！<br>
+【agree：进行扩容的时候，线程都不要插入数据】<br>
+tn线程过来也不闲着帮助其他线程去扩容？<br>
+t1----&gt;可控<br>
+t1---t2&gt;帮助它进行扩容？|</p>
+<pre><code class="language-java">    public V put(K key, V value) {
+        return putVal(key, value, false);
+    }
+
+    /** Implementation for put and putIfAbsent */
+    final V putVal(K key, V value, boolean onlyIfAbsent) {
+        if (key == null || value == null) throw new NullPointerException();
+        int hash = spread(key.hashCode());
+        int binCount = 0;
+        for (Node&lt;K,V&gt;[] tab = table;;) {
+            Node&lt;K,V&gt; f; int n, i, fh;
+            if (tab == null || (n = tab.length) == 0)
+                tab = initTable();
+            else if ((f = tabAt(tab, i = (n - 1) &amp; hash)) == null) {
+                if (casTabAt(tab, i, null,
+                             new Node&lt;K,V&gt;(hash, key, value, null)))
+                    break;                   // no lock when adding to empty bin
+            }
+            //这里一旦某一个线程判断fh=-1，也即要进行扩容时，所有线程都应该停止插入、删除等操作
+            //在这里同时帮助该线程进行扩容操作
+            else if ((fh = f.hash) == MOVED)
+                tab = helpTransfer(tab, f);
+            else {
+                V oldVal = null;
+                //注意这里虽然使用了synchronized同步代码块，但并不会使得效率降低太大，因为他这里的锁对象
+                //是每个table[i]，也即每次一个线程只能锁住一列链表，并不会锁住整个table，因此其他线程操作其他table[i]的链表上面的
+                //元素时，并不会被阻塞
+                synchronized (f) {
+                    if (tabAt(tab, i) == f) {
+                        if (fh &gt;= 0) {
+                            binCount = 1;
+                            for (Node&lt;K,V&gt; e = f;; ++binCount) {
+                                K ek;
+                                if (e.hash == hash &amp;&amp;
+                                    ((ek = e.key) == key ||
+                                     (ek != null &amp;&amp; key.equals(ek)))) {
+                                    oldVal = e.val;
+                                    if (!onlyIfAbsent)
+                                        e.val = value;
+                                    break;
+                                }
+                                Node&lt;K,V&gt; pred = e;
+                                if ((e = e.next) == null) {
+                                    pred.next = new Node&lt;K,V&gt;(hash, key,
+                                                              value, null);
+                                    break;
+                                }
+                            }
+                        }
+                        else if (f instanceof TreeBin) {
+                            Node&lt;K,V&gt; p;
+                            binCount = 2;
+                            if ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,
+                                                           value)) != null) {
+                                oldVal = p.val;
+                                if (!onlyIfAbsent)
+                                    p.val = value;
+                            }
+                        }
+                    }
+                }
+                if (binCount != 0) {
+                    if (binCount &gt;= TREEIFY_THRESHOLD)
+                        treeifyBin(tab, i);
+                    if (oldVal != null)
+                        return oldVal;
+                    break;
+                }
+            }
+        }
+        addCount(1L, binCount);
+        return null;
+    }
+</code></pre>
+<h2 id="4-jvm面试专题">4. JVM面试专题</h2>
+<h3 id="1-字符串常量池存在哪里">1. 字符串常量池存在哪里？</h3>
+<ul>
+<li>在JDK1.6版本及以下，字符串常量池和静态变量存放在永久代，后来JDK1.7之后，随着永久代改为元空间后(meta space)，字符串常量池(String table)与静态变量一起被移动到<font color='red'>堆</font>中。</li>
+<li>之所以会从永久代移动到堆中是因为垃圾回收问题，因为原先存放在永久代，而永久代的垃圾回收效率较低(Full GC)，而堆中的垃圾回收效率更高；</li>
+<li>对永久代调优比较困难，代价比较高(Full GC)</li>
+</ul>
+<p><font color='red'>【注意】：静态变量(类变量)存放在堆中，与堆中的Class对象放在一起。</font></p>
+<hr>
+<h3 id="2-对象内存布局视图">2. 对象内存布局视图</h3>
+<figure data-type="image" tabindex="1"><img src="java%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9.assets/image-20210723105916379.png" alt="image-20210723105916379" loading="lazy"></figure>
+<h3 id="3-string-在jvm内存中的存储方式">3. String 在JVM内存中的存储方式</h3>
+<ul>
+<li>
+<p>字符串常量池中是不会存储相同内容的字符串的。</p>
+</li>
+<li>
+<p>String的String Pool是一个固定大小的Hashtable，默认值大小长度是1009。如果放进String Pool的String非常多，就会造成Hash冲突严重，从而导致链表会很长，而链表长了后直接会造成的影响就是当调用String.intern时性能会大幅下降。</p>
+</li>
+<li>
+<p>使用-xx:StringTablesize可设置string Table的长度&gt;在dk6中String Table是固定的，就是1009的长度，所以如果常量池中的字符串过多就会导致效率下降很快。stringTablesize设置没有要求</p>
+</li>
+<li>
+<p>在jdk7中，String Table的长度默认值是60913，1009是可设置的最小值。</p>
+</li>
+</ul>
+<h3 id="4-字符串拼接操作">4. 字符串拼接操作</h3>
+<h4 id="1-字符串拼接原理">1. 字符串拼接原理</h4>
+<p><font color='red'>1.常量与常量的拼接结果在常量池，原理是编译期优化</font><br>
+2.常量池中不会存在相同内容的常量。<br>
+<font color='red'>3.只要其中有一个是变量，结果就在堆中。变量拼接的原理是StringBuilder</font><br>
+<font color='red'>4.如果拼接的结果调用intern()方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象地址</font>。</p>
+<pre><code class="language-java">@Test
+public void test3（）{
+	String s1=&quot;a&quot;；
+    string s2=&quot;b&quot;；
+    String s3=&quot;ab&quot;；
+        
+    /*
+	如下的s1+52的共行细节：
+	(1)stringeuilders=new stringeuilder（）；
+	(2)s.append（“a”）
+	(3)s.append（“b&quot;）
+	(4)s.toString（） 约等于new String（&quot;ab&quot;）
+	补充：在j（dk5.e之后使用的是stringeuilder，在jdk5.e之前使用的是stringBuffer
+	*/
+        
+    string s4=s1+s2；//I 
+    system.out.println（s3 == s4）；//false
+}
+</code></pre>
+<hr>
+<p><font color='red'>【注意】字存拼接操作不一定使用的是StringBuilder！</font><br>
+1.如果拼接符号左右两边都是字符串常量或常量引用，则仍然使用编译期优化，即非StringBuilder的方式，<br>
+2.针对于final修饰类、方法、基本数据类型、引用数据类型的量的结构时，能使用上final的时候建议使用上。</p>
+<pre><code class="language-JAVA">@Test 
+public void testa（）{
+    final String s1=&quot;a&quot;；
+    final String s2=&quot;b&quot;；
+    String s3=&quot;ab&quot;；
+    String s4=s1+s2；
+    system.out.println（s3==s4）；//true
+}
+</code></pre>
+<h4 id="2-字符串拼接与stringbuilderappend效率问题">2. 字符串拼接与StringBuilder.append效率问题</h4>
+<p>体会执行效率：通过stringBuilder的append（）的万式添加字符串的效率要远高于使用String的字符串的拼接方式！<br>
+详情：</p>
+<ul>
+<li>
+<p>StringBuilder 的append（）的方式：自始至终中只创建过一个StringBuilder的对象，而使用String的字符串拼接方式：创建过多个StringBuilder 和String的对象</p>
+</li>
+<li>
+<p>使用String的字符串拼接方式：内存中由于创建了较多的StringBuilder 和String的对象，内存占用更大；如果进行GC，需要花费额外的时间</p>
+</li>
+<li>
+<p>改进的空间：在实际开发中，如果基本确定要前前后后添加的字符串长度不高于某个限定值highLevel的情况下，建议使用如下的构造函数</p>
+<pre><code class="language-JAVA">StringBuilder s = new StringBuilder（highlevel）；//new char[highLevel]
+</code></pre>
+</li>
+</ul>
+<h4 id="3-intern方法">3. intern()方法</h4>
+<p>（1）<font color='red'>如果在常量池中已经存在相同的字符串，那么调用intern()方法会返回字符串常量池中该字符串的引用</font></p>
+<pre><code class="language-java">//也就是
+String s1 = new String(&quot;abc&quot;);
+String s2 = s.intern();
+System.out.println(s1==s2); //false
+</code></pre>
+<p>原因是s1是堆中字符串对象的地址，而s2是字符串常量池中字符串的地址，因此不相等</p>
+<hr>
+<p>（2）<font color='orange'>如果常量池中不存在相同的字符串，但是堆中存在字符串，那么调用该方法会返回堆中字符串的地址，因为调用intern()方法会将堆中原有的字符串引用拷贝到常量池中</font></p>
+<pre><code class="language-java">String s1 = new String(&quot;a&quot;)+new String(&quot;bc&quot;);
+String s2 = s.intern();
+System.out.println(s1==s2); //true
+</code></pre>
+<h4 id="4-总结string的intern的使用">4. 总结String的intern()的使用：</h4>
+<ul>
+<li>
+<p>jdk1.6中，将这个字符串对象尝试放入串池。如果串池中有，则并不会放入。返回已有的串池中的对象的地址，如果没有，<font color='orange'>会把此对象复制一份</font>，放入串池，并返回串池中的对象地址</p>
+</li>
+<li>
+<p>Jdk1.7起，将这个字符串对象尝试放入串池。如果串池中有，则并不会放入。返回已有的串池中的对象的地址，如果没有，<font color='orange'>则会把对象的引用地址复制一份</font>，放入串池，并返回串池中的引用地址</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="java%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9.assets/image-20210724130333337.png" alt="image-20210724130333337" loading="lazy"></figure>
+<p>​			<strong>上图为JDK1.6代码示意图</strong></p>
+<figure data-type="image" tabindex="3"><img src="java%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9.assets/image-20210724130214775.png" alt="image-20210724130214775" loading="lazy"></figure>
+<p>​			<strong>上图为JDK1.7以后代码示意图</strong></p>
+
+          </div>
+        </div>
+
+        
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://codeeLifer.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
