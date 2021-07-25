@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-07-25T07:51:17.017Z</updated>
+    <updated>2021-07-25T07:54:34.867Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -18,7 +18,7 @@
         <updated>2021-07-24T11:51:59.000Z</updated>
         <content type="html"><![CDATA[<ol>
 <li>Java基础面试专题<br>
-<a href="http://localhost:4000/post/java-ji-chu-mian-shi-chong-dian/">1. java基础</a></li>
+<a href="java-ji-chu-mian-shi-chong-dian">1. java基础</a></li>
 </ol>
 ]]></content>
     </entry>
