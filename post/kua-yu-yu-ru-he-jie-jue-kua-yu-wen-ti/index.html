@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628495178772">
+<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628508295853">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://codeeLifer.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="site-header">
     <div class="left">
       <a href="https://codeeLifer.github.io">
-        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628495178772" alt="" width="32px" height="32px">
+        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628508295853" alt="" width="32px" height="32px">
       </a>
       <a href="https://codeeLifer.github.io">
         <h1 class="site-title">Gridea</h1>
@@ -143,6 +143,56 @@
 </tr>
 </tbody>
 </table>
+<p>解决办法：</p>
+<pre><code class="language-java">package net.youqu.micro.service.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.util.pattern.PathPatternParser;
+
+/**
+ * description:
+ *
+ * @author slh
+ * @date 2021.01.10
+ */
+@Configuration
+public class CorsConfig {
+    @Bean
+    public CorsWebFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedMethod(&quot;*&quot;);
+        config.addAllowedOrigin(&quot;*&quot;);
+        config.addAllowedHeader(&quot;*&quot;);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
+        source.registerCorsConfiguration(&quot;/**&quot;, config);
+
+        return new CorsWebFilter(source);
+    }
+}
+
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+      # 跨域
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedHeaders: &quot;*&quot;
+            allowedOrigins: &quot;*&quot;
+            allowedMethods:
+            - GET
+              POST
+              DELETE
+              PUT
+              OPTION
+</code></pre>
 
           </div>
         </div>
