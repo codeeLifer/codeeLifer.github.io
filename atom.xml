@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-09T11:33:08.989Z</updated>
+    <updated>2021-08-09T12:41:38.841Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -120,15 +120,18 @@ spring:
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[DFS算法总结 1. 矩阵中的路径]]></title>
+        <title type="html"><![CDATA[DFS算法总结 ]]></title>
         <id>https://codeeLifer.github.io/post/dfs-lei-suan-fa-ti-zong-jie/</id>
         <link href="https://codeeLifer.github.io/post/dfs-lei-suan-fa-ti-zong-jie/">
         </link>
         <updated>2021-08-09T07:09:47.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://codeeLifer.github.io/post-images/1628493334019.jpg" alt="" loading="lazy">1. 矩阵中的路径<br>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://codeeLifer.github.io/post-images/1628493334019.jpg" alt="" loading="lazy"></figure>
+<ol>
+<li>矩阵中的路径<br>
 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。<br>
 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。<br>
-例如，在下面的 3×4 的矩阵中包含单词 &quot;ABCCED&quot;（单词中的字母已标出）。</p>
+例如，在下面的 3×4 的矩阵中包含单词 &quot;ABCCED&quot;（单词中的字母已标出）。</li>
+</ol>
 <p>示例 1：<br>
 输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]],<br>
 word = &quot;ABCCED&quot;<br>
@@ -190,11 +193,35 @@ public class Solution {
         return flag;
     }
 }
-
-
-
-
-
+</code></pre>
+<ol start="2">
+<li>不同路径<br>
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。<br>
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。<br>
+问总共有多少条不同的路径？<br>
+<img src="https://codeeLifer.github.io/post-images/1628512694119.PNG" alt="" loading="lazy"></li>
+</ol>
+<pre><code>class Solution {
+    public int uniquePaths(int m, int n) {
+        Map&lt;String,Integer&gt; resultMap = new HashMap&lt;&gt;();
+        return dfs(resultMap,1,1,m,n);
+    }
+    public int dfs(Map&lt;String, Integer&gt; map,int x ,int y,int m ,int n){
+        String s = x + &quot;*&quot; +  y;
+        if(map.containsKey(s)){
+            return map.get(s);
+        }
+        if(x &gt; m || y &gt; n ){
+            return 0;
+        }
+        if(x == m &amp;&amp; y == n){
+            return 1;
+        }
+        int result = dfs(map,x+1,y,m,n) + dfs(map,x,y+1,m,n);
+        map.put(s,result);
+        return result;
+    }
+}
 </code></pre>
 ]]></content>
     </entry>

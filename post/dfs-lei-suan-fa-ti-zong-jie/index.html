@@ -5,14 +5,14 @@
     
 <meta charset="utf-8" >
 
-<title>DFS算法总结 1. 矩阵中的路径 | Gridea</title>
+<title>DFS算法总结  | Gridea</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628508786944">
+<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628512846534">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://codeeLifer.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="site-header">
     <div class="left">
       <a href="https://codeeLifer.github.io">
-        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628508786944" alt="" width="32px" height="32px">
+        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628512846534" alt="" width="32px" height="32px">
       </a>
       <a href="https://codeeLifer.github.io">
         <h1 class="site-title">Gridea</h1>
@@ -86,16 +86,19 @@
       <div class="content-container">
         <div class="post-detail">
           
-          <h2 class="post-title">DFS算法总结 1. 矩阵中的路径</h2>
+          <h2 class="post-title">DFS算法总结 </h2>
           <div class="post-info post-detail-info">
             <span><i class="icon-calendar-outline"></i> 2021-08-09</span>
             
           </div>
           <div class="post-content">
-            <p><img src="https://codeeLifer.github.io/post-images/1628493334019.jpg" alt="" loading="lazy">1. 矩阵中的路径<br>
+            <figure data-type="image" tabindex="1"><img src="https://codeeLifer.github.io/post-images/1628493334019.jpg" alt="" loading="lazy"></figure>
+<ol>
+<li>矩阵中的路径<br>
 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。<br>
 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。<br>
-例如，在下面的 3×4 的矩阵中包含单词 &quot;ABCCED&quot;（单词中的字母已标出）。</p>
+例如，在下面的 3×4 的矩阵中包含单词 &quot;ABCCED&quot;（单词中的字母已标出）。</li>
+</ol>
 <p>示例 1：<br>
 输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]],<br>
 word = &quot;ABCCED&quot;<br>
@@ -157,11 +160,35 @@ public class Solution {
         return flag;
     }
 }
-
-
-
-
-
+</code></pre>
+<ol start="2">
+<li>不同路径<br>
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。<br>
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。<br>
+问总共有多少条不同的路径？<br>
+<img src="https://codeeLifer.github.io/post-images/1628512694119.PNG" alt="" loading="lazy"></li>
+</ol>
+<pre><code>class Solution {
+    public int uniquePaths(int m, int n) {
+        Map&lt;String,Integer&gt; resultMap = new HashMap&lt;&gt;();
+        return dfs(resultMap,1,1,m,n);
+    }
+    public int dfs(Map&lt;String, Integer&gt; map,int x ,int y,int m ,int n){
+        String s = x + &quot;*&quot; +  y;
+        if(map.containsKey(s)){
+            return map.get(s);
+        }
+        if(x &gt; m || y &gt; n ){
+            return 0;
+        }
+        if(x == m &amp;&amp; y == n){
+            return 1;
+        }
+        int result = dfs(map,x+1,y,m,n) + dfs(map,x,y+1,m,n);
+        map.put(s,result);
+        return result;
+    }
+}
 </code></pre>
 
           </div>
