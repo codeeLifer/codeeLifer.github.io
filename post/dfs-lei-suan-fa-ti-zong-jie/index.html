@@ -5,7 +5,7 @@
     
 <meta charset="utf-8" >
 
-<title>java面试重点 | Gridea</title>
+<title>DFS类算法题总结 | Gridea</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -86,25 +86,92 @@
       <div class="content-container">
         <div class="post-detail">
           
-          <h2 class="post-title">java面试重点</h2>
+          <h2 class="post-title">DFS类算法题总结</h2>
           <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2021-07-24</span>
+            <span><i class="icon-calendar-outline"></i> 2021-08-09</span>
             
           </div>
           <div class="post-content">
-            <ol>
-<li>Java基础面试专题<br>
-<a href="https://codeelifer.github.io/post/java-ji-chu-mian-shi-chong-dian/">1. java基础</a></li>
-</ol>
+            <p><img src="https://codeeLifer.github.io/post-images/1628493334019.jpg" alt="" loading="lazy">1. 矩阵中的路径<br>
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。<br>
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。<br>
+例如，在下面的 3×4 的矩阵中包含单词 &quot;ABCCED&quot;（单词中的字母已标出）。</p>
+<p>示例 1：<br>
+输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]],<br>
+word = &quot;ABCCED&quot;<br>
+输出：true</p>
+<pre><code class="language-javaimport">
+public class Solution {
+
+    public static void main(String[] args) {
+        HashMap&lt;Object, Object&gt; map = new HashMap&lt;&gt;();
+
+        char[][] board = {
+//                {'A', 'B', 'C', 'E'},
+//                {'S', 'F', 'C', 'S'},
+//                {'A', 'D', 'E', 'F'}
+                {'a','b'}
+        };
+
+        Solution solution = new Solution();
+        boolean bcfc = solution.exist(board, &quot;ba&quot;);
+        System.out.println(bcfc);
+    }
+    public boolean exist(char[][] board, String word) {
+        //初始化访问标记
+        boolean[][] visited = new boolean[board.length][board[0].length];
+        for (int i = 0; i &lt; board.length; i++) {
+            for (int j = 0; j &lt; board[0].length; j++) {
+                visited[i][j] = false;
+            }
+        }
+
+        for (int i = 0; i &lt; board.length; i++) {
+            for (int j = 0; j &lt; board[0].length; j++) {
+                if (dfs(board,i,j,word,0,visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean dfs(char[][] board, int x, int y, String word, int pathLength, boolean[][] visited) {
+     
+
+        if (pathLength == word.length()) {
+            return true;
+        }
+
+        boolean flag = false;
+        if (x &gt;= 0 &amp;&amp; x &lt; board.length &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; board[0].length &amp;&amp; word.charAt(pathLength) == board[x][y] &amp;&amp; !visited[x][y]) {
+            pathLength++;
+            visited[x][y] = true;
+
+            System.out.println(board[x][y]);
+
+            flag = dfs(board, x + 1, y, word, pathLength, visited) ||
+                    dfs(board, x, y + 1, word, pathLength, visited) ||
+                    dfs(board, x - 1, y, word, pathLength, visited) ||
+                    dfs(board, x, y - 1, word, pathLength, visited);
+
+            visited[x][y] = false;
+        }
+        return flag;
+    }
+}
+
+
+</code></pre>
 
           </div>
         </div>
 
         
           <div class="next-post">
-            <a class="purple-link" href="https://codeeLifer.github.io/post/hello-gridea/">
+            <a class="purple-link" href="https://codeeLifer.github.io/post/java-mian-shi-chong-dian/">
               <h3 class="post-title">
-                下一篇：Hello poolMan!
+                下一篇：java面试重点
               </h3>
             </a>
           </div>
