@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628508295853">
+<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1628508786944">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://codeeLifer.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="site-header">
     <div class="left">
       <a href="https://codeeLifer.github.io">
-        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628508295853" alt="" width="32px" height="32px">
+        <img class="avatar" src="https://codeeLifer.github.io/images/avatar.png?v=1628508786944" alt="" width="32px" height="32px">
       </a>
       <a href="https://codeeLifer.github.io">
         <h1 class="site-title">Gridea</h1>
@@ -100,19 +100,16 @@
 输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]],<br>
 word = &quot;ABCCED&quot;<br>
 输出：true</p>
-<pre><code class="language-javaimport">
+<pre><code class="language-java">javaimport java.util.HashMap;
 public class Solution {
-
     public static void main(String[] args) {
         HashMap&lt;Object, Object&gt; map = new HashMap&lt;&gt;();
-
         char[][] board = {
 //                {'A', 'B', 'C', 'E'},
 //                {'S', 'F', 'C', 'S'},
 //                {'A', 'D', 'E', 'F'}
                 {'a','b'}
         };
-
         Solution solution = new Solution();
         boolean bcfc = solution.exist(board, &quot;ba&quot;);
         System.out.println(bcfc);
@@ -160,6 +157,9 @@ public class Solution {
         return flag;
     }
 }
+
+
+
 
 
 </code></pre>

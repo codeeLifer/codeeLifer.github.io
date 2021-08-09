@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-09T11:24:58.377Z</updated>
+    <updated>2021-08-09T11:33:08.989Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -133,19 +133,16 @@ spring:
 输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]],<br>
 word = &quot;ABCCED&quot;<br>
 输出：true</p>
-<pre><code class="language-javaimport">
+<pre><code class="language-java">javaimport java.util.HashMap;
 public class Solution {
-
     public static void main(String[] args) {
         HashMap&lt;Object, Object&gt; map = new HashMap&lt;&gt;();
-
         char[][] board = {
 //                {'A', 'B', 'C', 'E'},
 //                {'S', 'F', 'C', 'S'},
 //                {'A', 'D', 'E', 'F'}
                 {'a','b'}
         };
-
         Solution solution = new Solution();
         boolean bcfc = solution.exist(board, &quot;ba&quot;);
         System.out.println(bcfc);
@@ -193,6 +190,9 @@ public class Solution {
         return flag;
     }
 }
+
+
+
 
 
 </code></pre>
