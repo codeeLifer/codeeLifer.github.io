@@ -1,9 +1,11 @@
+
+<!DOCTYPE html>
 <html>
   <head>
     
 <meta charset="utf-8" >
 
-<title>Gridea</title>
+<title>跨域与如何解决跨域问题 | Gridea</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -81,76 +83,84 @@
 </transition>
 
 
-        <div class="content-container">
+      <div class="content-container">
+        <div class="post-detail">
           
-          
+          <h2 class="post-title">跨域与如何解决跨域问题</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2021-08-09</span>
+            
+          </div>
+          <div class="post-content">
+            <table>
+<thead>
+<tr>
+<th style="text-align:left">URL</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">是否允许通信</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">http://www.a.com/a.js http://www.a.com/b.js</td>
+<td style="text-align:left">同一域名下</td>
+<td style="text-align:left">允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com/lab/a.js http://www.a.com/script/b.js</td>
+<td style="text-align:left">同一域名下不同文件夹</td>
+<td style="text-align:left">允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com:8000/a.js http://www.a.com/b.js</td>
+<td style="text-align:left">同一域名，不同端口</td>
+<td style="text-align:left">不允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com/a.js https://www.a.com/b.js</td>
+<td style="text-align:left">同一域名，不同协议</td>
+<td style="text-align:left">不允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com/a.js http://70.32.92.74/b.js</td>
+<td style="text-align:left">域名和域名对应ip</td>
+<td style="text-align:left">不允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com/a.js http://script.a.com/b.js</td>
+<td style="text-align:left">主域相同，子域不同</td>
+<td style="text-align:left">不允许</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.a.com/a.js http://a.com/b.js</td>
+<td style="text-align:left">同一域名，不同二级域名（同上）</td>
+<td style="text-align:left">不允许（cookie这种情况下也不允许访问）</td>
+</tr>
+<tr>
+<td style="text-align:left">http://www.cnblogs.com/a.js http://www.a.com/b.js</td>
+<td style="text-align:left">不同域名</td>
+<td style="text-align:left">不允许</td>
+</tr>
+</tbody>
+</table>
 
-<div class="archives-container">
-  
-    <h2 class="year">2021</h2>
-    
-      
-        <article class="post">
-          <a href="https://codeeLifer.github.io/post/kua-yu-yu-ru-he-jie-jue-kua-yu-wen-ti/">
-            <h2 class="post-title">
-              跨域与如何解决跨域问题
-              <small>2021-08-09</small>
-            </h2>
-          </a>
-        </article>
-      
-    
-      
-        <article class="post">
-          <a href="https://codeeLifer.github.io/post/dfs-lei-suan-fa-ti-zong-jie/">
-            <h2 class="post-title">
-              DFS算法总结 1. 矩阵中的路径
-              <small>2021-08-09</small>
-            </h2>
-          </a>
-        </article>
-      
-    
-      
-        <article class="post">
-          <a href="https://codeeLifer.github.io/post/java-mian-shi-chong-dian/">
-            <h2 class="post-title">
-              java面试重点
-              <small>2021-07-24</small>
-            </h2>
-          </a>
-        </article>
-      
-    
-      
-    
-  
-    <h2 class="year">2018</h2>
-    
-      
-    
-      
-    
-      
-    
-      
-        <article class="post">
-          <a href="https://codeeLifer.github.io/post/hello-gridea/">
-            <h2 class="post-title">
-              Hello poolMan!
-              <small>2018-12-12</small>
-            </h2>
-          </a>
-        </article>
-      
-    
-  
-</div>
-
-
+          </div>
         </div>
 
-        <div class="site-footer">
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codeeLifer.github.io/post/dfs-lei-suan-fa-ti-zong-jie/">
+              <h3 class="post-title">
+                下一篇：DFS算法总结 1. 矩阵中的路径
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
   <div class="slogan">温故而知新</div>
   <div class="social-container">
     
@@ -169,8 +179,8 @@
 </div>
 
 
-      </div>
-      <script type="application/javascript">
+    </div>
+    <script type="application/javascript">
 
 hljs.initHighlightingOnLoad()
 
@@ -186,6 +196,5 @@ var app = new Vue({
 
 
 
-    </div>
   </body>
 </html>
