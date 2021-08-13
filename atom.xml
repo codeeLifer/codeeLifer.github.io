@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-11T08:04:04.270Z</updated>
+    <updated>2021-08-13T06:23:18.548Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -10,6 +10,44 @@
     <logo>https://codeeLifer.github.io/images/avatar.png</logo>
     <icon>https://codeeLifer.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[如何打破双亲委派类加载模型？]]></title>
+        <id>https://codeeLifer.github.io/post/ru-he-da-po-shuang-qin-wei-pai-lei-jia-zai-mo-xing/</id>
+        <link href="https://codeeLifer.github.io/post/ru-he-da-po-shuang-qin-wei-pai-lei-jia-zai-mo-xing/">
+        </link>
+        <updated>2021-08-13T06:20:58.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<p><strong>使用线程上下文类加载器</strong></p>
+</li>
+<li>
+<p>双亲委托机制以及类加载器的问题</p>
+<ul>
+<li>
+<p>一般情况下，保证同一个类中所关联的其他类都是由当前类的类加载器所加载的。比如，ClassA本身在Ext下找到，那么他里面new出来的一些类也就只能用Ext去查找了（不会低一个级别），所以有些明明App可以找到的，却找不到了。</p>
+</li>
+<li>
+<p>JDBC API，他有实现的driven部分（mysql/sql server），我们的JDBC API都是由Boot或者Ext来载入的，但是JDBC driver却是由Ext或者App来载入，那么就有可能找不到driver了（<strong>因为驱动类是第三方厂商实现的，他们的包并没有与接口类放在一起，因此启动类与扩展类加载器找不到该类，从而导致加载失败</strong>）。在Java领域中，其实只要分成这种Api+SPI（Service Provide Interface，特定厂商提供）的，都会遇到此问题，常见的SPI有JDBC、JCE、JNDI、JAXP和JBI等。这些SPI的接口由Java核心库来提供，如JAXP的SPI接囗定义包含在javax.xml.parsers包中，SPI的接口是Java核心库的一部分，是由引导类加载器来加载的；SPI实现的Java类一般是由系统类加载器来加载的。引导类加载器是无法找到SPI的实现类的，因为它只加载Java的核心。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>通常当你需要动态加载资源的时候，你至少有三个ClassLoader可以选择：<br>
+1. 系统类加载器或叫作应用类加载器（system classloader or application classloader）<br>
+2.  当前类加载器<br>
+3.  当前线程类加载器</p>
+</li>
+<li>
+<p>线程类加载器是为了抛弃双亲委派加载链模式。每个线程都有一个关联的上下文类加载器。如果你使用new Thread0方式生成新的线程，新线程将继承其父线程的上下文类加载器。如果程序对线程上下文类加载器没有任何改动的话，程序中所有的线程将都使用系统类加载器作为上下文类加载器。<br>
+Thread.currentThread0.getContextClassLoader（）<br>
+Thread.currentThread0.setContextClassLoader（）</p>
+</li>
+<li>
+<p>如何不对当前线程的类加载器设置的话，则当前线程的默认加载器默认是应用类加载器ApplicationContextClassLoader</p>
+</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Cookie与Session]]></title>
         <id>https://codeeLifer.github.io/post/cookie-yu-session/</id>
