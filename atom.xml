@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-13T07:13:05.950Z</updated>
+    <updated>2021-08-13T07:22:35.572Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -10,6 +10,76 @@
     <logo>https://codeeLifer.github.io/images/avatar.png</logo>
     <icon>https://codeeLifer.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Java多态原理]]></title>
+        <id>https://codeeLifer.github.io/post/java-duo-tai-yuan-li/</id>
+        <link href="https://codeeLifer.github.io/post/java-duo-tai-yuan-li/">
+        </link>
+        <updated>2021-08-13T07:13:11.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<p>java中的多态分为<strong>编译时多态</strong>与<strong>运行时多态</strong></p>
+</li>
+<li>
+<p>首先理解java中的方法调用——静态绑定与动态绑定的区别</p>
+</li>
+<li>
+<p>在JVM中，将符号引用转换为调用方法的直接引用与方法的绑定机制相关。</p>
+<ol>
+<li>静态链接：<br>
+当一个字节码文件被装载进JVM内部时，如果被调用的目标方法在编译期可知，且运行期保持不变时。这种情况下将调用方法的符号引用转换为直接引用的过程称之为静态链接。</li>
+<li>动态链接：<br>
+如果被调用的方法在编译期无法被确定下来，也就是说，只能够在程序运行期将调用方法的符号引用转换为直接引用，由于这种引用转换过程具备动态<br>
+性，因此也就被称之为动态链接。</li>
+</ol>
+</li>
+<li>
+<p>对应的方法的绑定机制为：早期绑定（Early Binding）和晚期绑定（Late Binding）。绑定是一个字段、方法或者类在符号引用被替换为直接引用的过程，这仅仅发生一次。</p>
+<ol>
+<li>早期绑定：早期绑定就是指被调用的目标方法如果在编译期可知，且运行期保持不变时，即可将这个方法与所属的类型进行绑定，这样一来，由于明确了被调用的目标方法究竟是哪一个，因此也就可以使用静态链接的方式将符号引用转换为直接引用。</li>
+<li>晚期绑定：如果被调用的方法在编译期无法被确定下来，只能够在程序运行期根据实际的类型绑定相关的方法，这种绑定方式也就被称之为晚期绑定。</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>编译时多态</li>
+</ol>
+<ul>
+<li>编译期间决定目标方法</li>
+<li>通过重载来实现</li>
+<li>方法名相同，参数不相同</li>
+</ul>
+<ol start="2">
+<li>运行时多态</li>
+</ol>
+<ul>
+<li>运行期间决定目标方法</li>
+<li>通过重写和继承实现</li>
+</ul>
+<ol start="3">
+<li>
+<p>java重写本质</p>
+<ul>
+<li>找到操作数栈顶的第一个元素所执行的对象的实际类型，记作C。</li>
+<li>如果在类型C中找到与常量中的描述符合简单名称都相符的方法，则进行访问权限校验，如果通过则返回这个方法的直接引用，查找过程结束；如果不通过，则返回java.1ang.IlegalAccessError 异常</li>
+<li>否则，按照继承关系从下往上依次对C的各个父类进行第2步的搜索和验证过程。</li>
+<li>如果始终没有找到合适的方法，则抛出java.lang.AbstractMethodError</li>
+<li>IlegalAccessError介绍：程序试图访问或修改一个属性或调用一个方法，这个属性或方法，你没有权限访问。一般的，这个会引起编译器异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</li>
+</ul>
+</li>
+<li>
+<p>虚方法表</p>
+</li>
+</ol>
+<ul>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话就可能影响到执行效率。因此，为了提高性能，JVM采用在类的方法区建立一个虚方法表（virtual method table）（非虚方法不会出现在表中）来实现。使用索引表来代替查找。</li>
+<li>每个类中都有一个虚方法表，表中存放着各个方法的实际入口。</li>
+<li>那么虚方法表什么时候被创建？<br>
+虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成之后，JVM会把该类的方法表也初始化完毕。<br>
+<img src="https://codeeLifer.github.io/post-images/1628839298160.png" alt="" loading="lazy"></li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[如何打破双亲委派类加载模型？]]></title>
         <id>https://codeeLifer.github.io/post/ru-he-da-po-shuang-qin-wei-pai-lei-jia-zai-mo-xing/</id>
