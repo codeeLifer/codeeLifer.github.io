@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>跨域与如何解决跨域问题 | Gridea</title>
+<title>拓扑排序——课程表类问题 | Gridea</title>
 
 <link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1629100608806">
 
@@ -97,115 +97,76 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    跨域与如何解决跨域问题
+                    拓扑排序——课程表类问题
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-08-09 ·
+                        · 2021-08-16 ·
                     </time>
                     
                 </div>
                 <div class="post-content">
-                    <table>
-<thead>
-<tr>
-<th style="text-align:left">URL</th>
-<th style="text-align:left">说明</th>
-<th style="text-align:left">是否允许通信</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">http://www.a.com/a.js http://www.a.com/b.js</td>
-<td style="text-align:left">同一域名下</td>
-<td style="text-align:left">允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com/lab/a.js http://www.a.com/script/b.js</td>
-<td style="text-align:left">同一域名下不同文件夹</td>
-<td style="text-align:left">允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com:8000/a.js http://www.a.com/b.js</td>
-<td style="text-align:left">同一域名，不同端口</td>
-<td style="text-align:left">不允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com/a.js https://www.a.com/b.js</td>
-<td style="text-align:left">同一域名，不同协议</td>
-<td style="text-align:left">不允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com/a.js http://70.32.92.74/b.js</td>
-<td style="text-align:left">域名和域名对应ip</td>
-<td style="text-align:left">不允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com/a.js http://script.a.com/b.js</td>
-<td style="text-align:left">主域相同，子域不同</td>
-<td style="text-align:left">不允许</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.a.com/a.js http://a.com/b.js</td>
-<td style="text-align:left">同一域名，不同二级域名（同上）</td>
-<td style="text-align:left">不允许（cookie这种情况下也不允许访问）</td>
-</tr>
-<tr>
-<td style="text-align:left">http://www.cnblogs.com/a.js http://www.a.com/b.js</td>
-<td style="text-align:left">不同域名</td>
-<td style="text-align:left">不允许</td>
-</tr>
-</tbody>
-</table>
-<p>解决办法：</p>
-<pre><code class="language-java">package net.youqu.micro.service.config;
+                    <figure data-type="image" tabindex="1"><img src="https://codeeLifer.github.io/post-images/1629099583824.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<p>拓扑排序对应施工的流程图具有特别重要的作用，它可以决定哪些子工程必须要先执行，哪些子工程要在某些工程执行后才可以执行。为了形象地反映出整个工程中各个子工程（活动）之间的先后关系，可用一个有向图来表示，图中的顶点代表活动（子工程），图中的有向边代表活动的先后关系，只有当起点活动完成之后，其终点活动才能进行。通常，我们把这种顶点表示活动、边表示活动间先后关系的有向图称做顶点活动网（Activity On Vertex network），简称AOV网。</p>
+</li>
+<li>
+<p>一个AOV网应该是一个有向无环图（Directed Acyclic Graph简称DAG），不应该带有回路，因为若带有回路，则回路上的活动陷入死循环。在AOV网中，若不存在回路，则所有活动可排列成一个线性序列，使得每个活动的所有前驱活动都排在该e动的前面，我们把此序列叫做拓扑序列（topological order），由AoV网构造拓扑序列的过程叫做拓扑排序（topologicalsort）。AOV网的拓扑序列不是唯一的，满足上述定义的任一线性序列都称作它的拓扑序列。</p>
+</li>
+</ul>
+<h1 id="1-拓扑排序一般有两种解法">1. 拓扑排序一般有两种解法：</h1>
+<ol>
+<li>kahn算法<br>
+有点类似图的广度优先遍历<br>
+<strong>算法步骤：</strong></li>
+<li>把入度为0的点入栈；</li>
+<li>栈顶的点出栈并输出，从图中删除此点及以它的出边；</li>
+<li>重复上述两步，直到不存在入度为0的点为止。</li>
+<li>最后若输出的顶点数等于AOV网中的顶点数，则输出顶点的拓扑序列。若输出的顶点数小于AOV网中的顶点数，则说明该有向图有环。<br>
+过程如下：<br>
+<img src="https://codeeLifer.github.io/post-images/1629100120062.png" alt="" loading="lazy"></li>
+</ol>
+<h1 id="2-基于kahn算法的课程表问题解法">2. 基于Kahn算法的课程表问题解法</h1>
+<figure data-type="image" tabindex="2"><img src="https://codeeLifer.github.io/post-images/1629100367968.png" alt="" loading="lazy"></figure>
+<pre><code>class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List&lt;ArrayList&lt;Integer&gt;&gt; edge = new ArrayList&lt;&gt;();
+        int[] indegree = new int[numCourses]; 
+        for(int i = 0; i&lt; numCourses;i++){
+            edge.add(new ArrayList&lt;&gt;());
+        }
+        for(int i = 0;i&lt;prerequisites.length;i++){
+            edge.get(prerequisites[i][1]).add(prerequisites[i][0]);
+            indegree[prerequisites[i][0]]++;
+        }
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.util.pattern.PathPatternParser;
-
-/**
- * description:
- *
- * @author slh
- * @date 2021.01.10
- */
-@Configuration
-public class CorsConfig {
-    @Bean
-    public CorsWebFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedMethod(&quot;*&quot;);
-        config.addAllowedOrigin(&quot;*&quot;);
-        config.addAllowedHeader(&quot;*&quot;);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
-        source.registerCorsConfiguration(&quot;/**&quot;, config);
-
-        return new CorsWebFilter(source);
+        Queue&lt;Integer&gt; queue = new LinkedList&lt;Integer&gt;();
+        for(int i = 0;i&lt;numCourses;i++){
+            if(indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        int[] res = new int[numCourses]; //结果集数组
+        int visited = 0; //标记是否该序列是否能进行完全拓扑排序
+        while(!queue.isEmpty()){
+            int nums = queue.peek();
+            res[visited++] = nums;
+            int i = queue.poll();
+            ArrayList&lt;Integer&gt; list = edge.get(i); //得到i的邻接节点
+            for(Integer num : list){   //遍历邻接节点 
+                indegree[num]--;      
+                if(indegree[num] == 0){   //入度为0则继续入队
+                    queue.offer(num);
+                }
+            }
+        }
+        if(visited == numCourses){
+            return res;
+        }
+        return new int[]{};
     }
 }
-
-
-spring:
-  cloud:
-    gateway:
-      discovery:
-      # 跨域
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedHeaders: &quot;*&quot;
-            allowedOrigins: &quot;*&quot;
-            allowedMethods:
-            - GET
-              POST
-              DELETE
-              PUT
-              OPTION
 </code></pre>
 
                 </div>
@@ -215,8 +176,8 @@ spring:
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://codeeLifer.github.io/post/dfs-lei-suan-fa-ti-zong-jie/" class="post-title gt-a-link">
-                    DFS算法总结 
+                <a href="https://codeeLifer.github.io/post/cong-shu-ru-url-dao-liu-lan-qi-xian-shi-ye-mian-de-liu-cheng/" class="post-title gt-a-link">
+                    从输入URL到浏览器显示页面的流程
                 </a>
             </div>
         

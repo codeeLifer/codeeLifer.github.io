@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-16T07:37:14.709Z</updated>
+    <updated>2021-08-16T07:56:51.631Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -10,6 +10,76 @@
     <logo>https://codeeLifer.github.io/images/avatar.png</logo>
     <icon>https://codeeLifer.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[拓扑排序——课程表类问题]]></title>
+        <id>https://codeeLifer.github.io/post/tuo-bu-pai-xu-ke-cheng-biao-lei-wen-ti/</id>
+        <link href="https://codeeLifer.github.io/post/tuo-bu-pai-xu-ke-cheng-biao-lei-wen-ti/">
+        </link>
+        <updated>2021-08-16T07:38:47.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://codeeLifer.github.io/post-images/1629099583824.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<p>拓扑排序对应施工的流程图具有特别重要的作用，它可以决定哪些子工程必须要先执行，哪些子工程要在某些工程执行后才可以执行。为了形象地反映出整个工程中各个子工程（活动）之间的先后关系，可用一个有向图来表示，图中的顶点代表活动（子工程），图中的有向边代表活动的先后关系，只有当起点活动完成之后，其终点活动才能进行。通常，我们把这种顶点表示活动、边表示活动间先后关系的有向图称做顶点活动网（Activity On Vertex network），简称AOV网。</p>
+</li>
+<li>
+<p>一个AOV网应该是一个有向无环图（Directed Acyclic Graph简称DAG），不应该带有回路，因为若带有回路，则回路上的活动陷入死循环。在AOV网中，若不存在回路，则所有活动可排列成一个线性序列，使得每个活动的所有前驱活动都排在该e动的前面，我们把此序列叫做拓扑序列（topological order），由AoV网构造拓扑序列的过程叫做拓扑排序（topologicalsort）。AOV网的拓扑序列不是唯一的，满足上述定义的任一线性序列都称作它的拓扑序列。</p>
+</li>
+</ul>
+<h1 id="1-拓扑排序一般有两种解法">1. 拓扑排序一般有两种解法：</h1>
+<ol>
+<li>kahn算法<br>
+有点类似图的广度优先遍历<br>
+<strong>算法步骤：</strong></li>
+<li>把入度为0的点入栈；</li>
+<li>栈顶的点出栈并输出，从图中删除此点及以它的出边；</li>
+<li>重复上述两步，直到不存在入度为0的点为止。</li>
+<li>最后若输出的顶点数等于AOV网中的顶点数，则输出顶点的拓扑序列。若输出的顶点数小于AOV网中的顶点数，则说明该有向图有环。<br>
+过程如下：<br>
+<img src="https://codeeLifer.github.io/post-images/1629100120062.png" alt="" loading="lazy"></li>
+</ol>
+<h1 id="2-基于kahn算法的课程表问题解法">2. 基于Kahn算法的课程表问题解法</h1>
+<figure data-type="image" tabindex="2"><img src="https://codeeLifer.github.io/post-images/1629100367968.png" alt="" loading="lazy"></figure>
+<pre><code>class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List&lt;ArrayList&lt;Integer&gt;&gt; edge = new ArrayList&lt;&gt;();
+        int[] indegree = new int[numCourses]; 
+        for(int i = 0; i&lt; numCourses;i++){
+            edge.add(new ArrayList&lt;&gt;());
+        }
+        for(int i = 0;i&lt;prerequisites.length;i++){
+            edge.get(prerequisites[i][1]).add(prerequisites[i][0]);
+            indegree[prerequisites[i][0]]++;
+        }
+
+        Queue&lt;Integer&gt; queue = new LinkedList&lt;Integer&gt;();
+        for(int i = 0;i&lt;numCourses;i++){
+            if(indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        int[] res = new int[numCourses]; //结果集数组
+        int visited = 0; //标记是否该序列是否能进行完全拓扑排序
+        while(!queue.isEmpty()){
+            int nums = queue.peek();
+            res[visited++] = nums;
+            int i = queue.poll();
+            ArrayList&lt;Integer&gt; list = edge.get(i); //得到i的邻接节点
+            for(Integer num : list){   //遍历邻接节点 
+                indegree[num]--;      
+                if(indegree[num] == 0){   //入度为0则继续入队
+                    queue.offer(num);
+                }
+            }
+        }
+        if(visited == numCourses){
+            return res;
+        }
+        return new int[]{};
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[从输入URL到浏览器显示页面的流程]]></title>
         <id>https://codeeLifer.github.io/post/cong-shu-ru-url-dao-liu-lan-qi-xian-shi-ye-mian-de-liu-cheng/</id>
@@ -1057,17 +1127,6 @@ public class Solution {
 <li>Java基础面试专题<br>
 <a href="https://codeelifer.github.io/post/java-ji-chu-mian-shi-chong-dian/">1. java基础</a></li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello poolMan!]]></title>
-        <id>https://codeeLifer.github.io/post/hello-gridea/</id>
-        <link href="https://codeeLifer.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <content type="html"><![CDATA[<p><a href="https://github.com/codeeLifer">我的GitHub</a><br>
-<a href="https://codeeLifer.github.io">博客主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
 ]]></content>
     </entry>
 </feed>
