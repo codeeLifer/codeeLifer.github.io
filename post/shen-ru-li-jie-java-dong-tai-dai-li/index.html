@@ -1,0 +1,363 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>深入理解Java动态代理 | Gridea</title>
+
+<link rel="shortcut icon" href="https://codeeLifer.github.io/favicon.ico?v=1629097000420">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://codeeLifer.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Gridea
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="https://codeeLifer.github.io" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="https://codeeLifer.github.io/post/qin-shi-420" class="menu gt-a-link">
+                            寝室420
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1629097000420" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    深入理解Java动态代理
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-08-16 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="1-动态代理入门案例">1. 动态代理入门案例</h1>
+<ul>
+<li>接口</li>
+</ul>
+<pre><code class="language-java">public interface Star {
+    public void sing();
+    public void dance();
+}
+</code></pre>
+<ul>
+<li>被代理类</li>
+</ul>
+<pre><code class="language-java">public class SingerStar implements Star{
+    @Override
+    public void sing() {
+        System.out.println(&quot;歌唱明星在唱歌&quot;);
+    }
+
+    @Override
+    public void dance() {
+        System.out.println(&quot;歌唱明星在跳舞&quot;);
+    }
+</code></pre>
+<ul>
+<li>使用动态代理</li>
+</ul>
+<pre><code class="language-java">    /*ClassLoader loader : 类加载器
+      Class&lt;?&gt;[] interfaces : 接口Class文件
+      InvocationHandler h : 
+      */
+    public static void main(String[] args) {
+        SingerStar singerStar = new SingerStar();
+
+        Star proxyInstance = (Star) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), SingerStar.class.getInterfaces(), new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println(&quot;代理公司正在帮忙找场地......&quot;);
+                System.out.println(&quot;代理公司正在买票......&quot;);
+                method.invoke(singerStar, args);  //调用被代理对象的方法
+                System.out.println(&quot;代理公司正在帮忙收拾打扫场地......&quot;);
+                return null;
+            }
+        });
+        proxyInstance.sing();
+
+        generateClassFile(SingerStar.class,&quot;SingStar&quot;);
+    }
+</code></pre>
+<ul>
+<li>结果</li>
+</ul>
+<pre><code>代理公司正在帮忙找场地......
+代理公司正在买票......
+歌唱明星在唱歌
+代理公司正在帮忙收拾打扫场地......
+</code></pre>
+<h2 id="2动态代理原理">2.动态代理原理</h2>
+<p>使用jdk自带的动态代理在<strong>内存中</strong>生成的类，并创建该类的实例对象，因此需要将其读取到文件中经过反编译才能看到。</p>
+<p>反编译生成类如下：</p>
+<pre><code class="language-java">import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
+
+public final class SingStar extends Proxy implements SingerStar {
+  private static Method m1;
+  
+  private static Method m2;
+  
+  
+  public SingStar(InvocationHandler paramInvocationHandler) {
+    super(paramInvocationHandler);
+  }
+  
+  
+  public final void dance() {
+    try {
+      this.h.invoke(this, m1, null);
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+
+  
+  public final void sing() {
+    try {
+      this.h.invoke(this, m2, null);
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+  
+  
+  static {
+    try {
+      m1 = Class.forName(&quot;SingerStar&quot;).getMethod(&quot;dance&quot;, new Class[0]);
+      m2 = Class.forName(&quot;SingerStar&quot;).getMethod(&quot;sing&quot;, new Class[0]);
+ 
+      return;
+    } catch (NoSuchMethodException noSuchMethodException) {
+      throw new NoSuchMethodError(noSuchMethodException.getMessage());
+    } catch (ClassNotFoundException classNotFoundException) {
+      throw new NoClassDefFoundError(classNotFoundException.getMessage());
+    } 
+  }
+}
+
+</code></pre>
+<p><strong>动态代理执行流程</strong></p>
+<pre><code class="language-java"> @CallerSensitive
+    public static Object newProxyInstance(ClassLoader loader,
+                                          Class&lt;?&gt;[] interfaces,
+                                          InvocationHandler h)
+        throws IllegalArgumentException
+    {
+        Objects.requireNonNull(h);
+
+        final Class&lt;?&gt;[] intfs = interfaces.clone();
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
+        }
+
+        /*
+         * Look up or generate the designated proxy class.
+         */
+       	/*在这里将生成动态代理类的字节码*/
+        Class&lt;?&gt; cl = getProxyClass0(loader, intfs);
+
+        /*
+         * Invoke its constructor with the designated invocation handler.
+         */
+        try {
+            if (sm != null) {
+                checkNewProxyPermission(Reflection.getCallerClass(), cl);
+            }
+
+            final Constructor&lt;?&gt; cons = cl.getConstructor(constructorParams);
+            final InvocationHandler ih = h;
+            if (!Modifier.isPublic(cl.getModifiers())) {
+                AccessController.doPrivileged(new PrivilegedAction&lt;Void&gt;() {
+                    public Void run() {
+                        cons.setAccessible(true);
+                        return null;
+                    }
+                });
+            }
+            return cons.newInstance(new Object[]{h});
+        } catch (IllegalAccessException|InstantiationException e) {
+            throw new InternalError(e.toString(), e);
+        } catch (InvocationTargetException e) {
+            Throwable t = e.getCause();
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new InternalError(t.toString(), t);
+            }
+        } catch (NoSuchMethodException e) {
+            throw new InternalError(e.toString(), e);
+        }
+    }
+</code></pre>
+<pre><code class="language-java">    private static Class&lt;?&gt; getProxyClass0(ClassLoader loader,
+                                           Class&lt;?&gt;... interfaces) {
+        //首先检验接口长度
+        if (interfaces.length &gt; 65535) {
+            throw new IllegalArgumentException(&quot;interface limit exceeded&quot;);
+        }
+
+        // If the proxy class defined by the given loader implementing
+        // the given interfaces exists, this will simply return the cached copy;
+        // otherwise, it will create the proxy class via the ProxyClassFactory
+        //首先判断是否能从缓存中得到字节码
+        return proxyClassCache.get(loader, interfaces);
+    }
+</code></pre>
+<p><img src="https://codeeLifer.github.io/post-images/1629096950872.png" alt="" loading="lazy"><br>
+<img src="https://codeeLifer.github.io/post-images/1629096597190.png" alt="" loading="lazy"><br>
+<img src="https://codeeLifer.github.io/post-images/1629096917649.png" alt="" loading="lazy"><br>
+分析动态代理函数调用过程</p>
+<pre><code class="language-java">  public final void dance() {
+    try { 
+      this.h.invoke(this, m1, null);  // 此处的h为其继承的父类Proxy中的protected InvocationHandler h 属性
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://codeeLifer.github.io/post/java-duo-tai-yuan-li/" class="post-title gt-a-link">
+                    Java多态原理
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">温故而知新</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/codeeLifer" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://codeeLifer.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

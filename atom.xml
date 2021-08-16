@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://codeeLifer.github.io</id>
     <title>Gridea</title>
-    <updated>2021-08-13T11:47:41.338Z</updated>
+    <updated>2021-08-16T06:57:47.711Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://codeeLifer.github.io"/>
     <link rel="self" href="https://codeeLifer.github.io/atom.xml"/>
@@ -10,6 +10,211 @@
     <logo>https://codeeLifer.github.io/images/avatar.png</logo>
     <icon>https://codeeLifer.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[深入理解Java动态代理]]></title>
+        <id>https://codeeLifer.github.io/post/shen-ru-li-jie-java-dong-tai-dai-li/</id>
+        <link href="https://codeeLifer.github.io/post/shen-ru-li-jie-java-dong-tai-dai-li/">
+        </link>
+        <updated>2021-08-16T06:45:10.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-动态代理入门案例">1. 动态代理入门案例</h1>
+<ul>
+<li>接口</li>
+</ul>
+<pre><code class="language-java">public interface Star {
+    public void sing();
+    public void dance();
+}
+</code></pre>
+<ul>
+<li>被代理类</li>
+</ul>
+<pre><code class="language-java">public class SingerStar implements Star{
+    @Override
+    public void sing() {
+        System.out.println(&quot;歌唱明星在唱歌&quot;);
+    }
+
+    @Override
+    public void dance() {
+        System.out.println(&quot;歌唱明星在跳舞&quot;);
+    }
+</code></pre>
+<ul>
+<li>使用动态代理</li>
+</ul>
+<pre><code class="language-java">    /*ClassLoader loader : 类加载器
+      Class&lt;?&gt;[] interfaces : 接口Class文件
+      InvocationHandler h : 
+      */
+    public static void main(String[] args) {
+        SingerStar singerStar = new SingerStar();
+
+        Star proxyInstance = (Star) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), SingerStar.class.getInterfaces(), new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println(&quot;代理公司正在帮忙找场地......&quot;);
+                System.out.println(&quot;代理公司正在买票......&quot;);
+                method.invoke(singerStar, args);  //调用被代理对象的方法
+                System.out.println(&quot;代理公司正在帮忙收拾打扫场地......&quot;);
+                return null;
+            }
+        });
+        proxyInstance.sing();
+
+        generateClassFile(SingerStar.class,&quot;SingStar&quot;);
+    }
+</code></pre>
+<ul>
+<li>结果</li>
+</ul>
+<pre><code>代理公司正在帮忙找场地......
+代理公司正在买票......
+歌唱明星在唱歌
+代理公司正在帮忙收拾打扫场地......
+</code></pre>
+<h2 id="2动态代理原理">2.动态代理原理</h2>
+<p>使用jdk自带的动态代理在<strong>内存中</strong>生成的类，并创建该类的实例对象，因此需要将其读取到文件中经过反编译才能看到。</p>
+<p>反编译生成类如下：</p>
+<pre><code class="language-java">import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
+
+public final class SingStar extends Proxy implements SingerStar {
+  private static Method m1;
+  
+  private static Method m2;
+  
+  
+  public SingStar(InvocationHandler paramInvocationHandler) {
+    super(paramInvocationHandler);
+  }
+  
+  
+  public final void dance() {
+    try {
+      this.h.invoke(this, m1, null);
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+
+  
+  public final void sing() {
+    try {
+      this.h.invoke(this, m2, null);
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+  
+  
+  static {
+    try {
+      m1 = Class.forName(&quot;SingerStar&quot;).getMethod(&quot;dance&quot;, new Class[0]);
+      m2 = Class.forName(&quot;SingerStar&quot;).getMethod(&quot;sing&quot;, new Class[0]);
+ 
+      return;
+    } catch (NoSuchMethodException noSuchMethodException) {
+      throw new NoSuchMethodError(noSuchMethodException.getMessage());
+    } catch (ClassNotFoundException classNotFoundException) {
+      throw new NoClassDefFoundError(classNotFoundException.getMessage());
+    } 
+  }
+}
+
+</code></pre>
+<p><strong>动态代理执行流程</strong></p>
+<pre><code class="language-java"> @CallerSensitive
+    public static Object newProxyInstance(ClassLoader loader,
+                                          Class&lt;?&gt;[] interfaces,
+                                          InvocationHandler h)
+        throws IllegalArgumentException
+    {
+        Objects.requireNonNull(h);
+
+        final Class&lt;?&gt;[] intfs = interfaces.clone();
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
+        }
+
+        /*
+         * Look up or generate the designated proxy class.
+         */
+       	/*在这里将生成动态代理类的字节码*/
+        Class&lt;?&gt; cl = getProxyClass0(loader, intfs);
+
+        /*
+         * Invoke its constructor with the designated invocation handler.
+         */
+        try {
+            if (sm != null) {
+                checkNewProxyPermission(Reflection.getCallerClass(), cl);
+            }
+
+            final Constructor&lt;?&gt; cons = cl.getConstructor(constructorParams);
+            final InvocationHandler ih = h;
+            if (!Modifier.isPublic(cl.getModifiers())) {
+                AccessController.doPrivileged(new PrivilegedAction&lt;Void&gt;() {
+                    public Void run() {
+                        cons.setAccessible(true);
+                        return null;
+                    }
+                });
+            }
+            return cons.newInstance(new Object[]{h});
+        } catch (IllegalAccessException|InstantiationException e) {
+            throw new InternalError(e.toString(), e);
+        } catch (InvocationTargetException e) {
+            Throwable t = e.getCause();
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new InternalError(t.toString(), t);
+            }
+        } catch (NoSuchMethodException e) {
+            throw new InternalError(e.toString(), e);
+        }
+    }
+</code></pre>
+<pre><code class="language-java">    private static Class&lt;?&gt; getProxyClass0(ClassLoader loader,
+                                           Class&lt;?&gt;... interfaces) {
+        //首先检验接口长度
+        if (interfaces.length &gt; 65535) {
+            throw new IllegalArgumentException(&quot;interface limit exceeded&quot;);
+        }
+
+        // If the proxy class defined by the given loader implementing
+        // the given interfaces exists, this will simply return the cached copy;
+        // otherwise, it will create the proxy class via the ProxyClassFactory
+        //首先判断是否能从缓存中得到字节码
+        return proxyClassCache.get(loader, interfaces);
+    }
+</code></pre>
+<p><img src="https://codeeLifer.github.io/post-images/1629096950872.png" alt="" loading="lazy"><br>
+<img src="https://codeeLifer.github.io/post-images/1629096597190.png" alt="" loading="lazy"><br>
+<img src="https://codeeLifer.github.io/post-images/1629096917649.png" alt="" loading="lazy"><br>
+分析动态代理函数调用过程</p>
+<pre><code class="language-java">  public final void dance() {
+    try { 
+      this.h.invoke(this, m1, null);  // 此处的h为其继承的父类Proxy中的protected InvocationHandler h 属性
+      return;
+    } catch (Error|RuntimeException error) {
+      throw null;
+    } catch (Throwable throwable) {
+      throw new UndeclaredThrowableException(throwable);
+    } 
+  }
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java多态原理]]></title>
         <id>https://codeeLifer.github.io/post/java-duo-tai-yuan-li/</id>
